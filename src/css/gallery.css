@@ -56,6 +56,20 @@ img{
     text-align:center;
 }
 
+.load-more-button{
+    display: block;
+    width: 91px;
+    height: 40px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.load-more-button.is-hidden{
+    display: none;
+}
+
 .loader {
     position: relative;
     width: 100px;

@@ -2,19 +2,19 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { refs } from '../main';
 
-export function createGallery(images) {
-  const galleryArray = [];
-  for (const image of images) {
-    const {
-      largeImageURL,
-      webformatURL,
-      tags,
-      likes,
-      views,
-      comments,
-      downloads,
-    } = image;
-    const markup = `<li class="gallery-item">
+export function createGallery(queryCards) {
+  const markup = queryCards
+    .map(
+      ({
+        largeImageURL,
+        webformatURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => {
+        return `<li class="gallery-item">
           <a class="gallery-link" href="${largeImageURL}"
             ><img
               src="${webformatURL}"
@@ -42,10 +42,12 @@ export function createGallery(images) {
             </ul></a
           >
         </li>`;
-    galleryArray.push(markup);
-  }
-  refs.galleryList.innerHTML = galleryArray.join('');
-  // createSimpleLightBox();
+      }
+    )
+    .join('');
+
+  refs.galleryList.insertAdjacentHTML('beforeend', markup);
+
   gallerySimpleLightBox.refresh();
 }
 
@@ -53,13 +55,6 @@ const gallerySimpleLightBox = new SimpleLightbox('.gallery-link', {
   captionsData: 'alt',
   captionDelay: 250,
 });
-
-// export function createSimpleLightBox() {
-//   const gallerySimpleLightBox = new SimpleLightbox('.gallery-link', {
-//     captionsData: 'alt',
-//     captionDelay: 250,
-//   });
-// }
 
 export function clearGallery() {
   refs.galleryList.innerHTML = '';
@@ -71,4 +66,12 @@ export function showLoader() {
 
 export function hideLoader() {
   refs.loader.classList.add('is-hidden');
+}
+
+export function showLoadMoreButton() {
+  refs.loadMoreButton.classList.remove('is-hidden');
+}
+
+export function hideLoadMoreButton() {
+  refs.loadMoreButton.classList.add('is-hidden');
 }
