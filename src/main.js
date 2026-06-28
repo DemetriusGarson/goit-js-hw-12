@@ -48,7 +48,7 @@ async function onSubmitButtonClick(event) {
         });
       } else {
         createGallery(data.hits);
-        if (page < Math.ceil(data.totalHits / 15)) {
+        if (page >= Math.ceil(data.totalHits / 15)) {
           console.log(
             `We're sorry, but you've reached the end of search results.`
           );
@@ -79,22 +79,32 @@ async function onLoadMoreButtonClick() {
   showLoader();
   try {
     const data = await getImagesByQuery(searchQuery, page);
-    createGallery(data.hits);
-    window.scrollBy({
-      top:
-        document.querySelector('.gallery-item').getBoundingClientRect().height *
-        2,
-      behavior: 'smooth',
-    });
-    if (page < Math.ceil(data.totalHits / 15)) {
-      console.log(`We're sorry, but you've reached the end of search results.`);
+    if (data.hits.length === 0) {
       iziToast.show({
-        message: `We're sorry, but you've reached the end of search results.`,
+        message:
+          'Sorry, there are no images matching your search query. Please try again!',
         position: 'topRight',
       });
     } else {
-      showLoadMoreButton();
-      refs.loadMoreButton.addEventListener('click', onLoadMoreButtonClick);
+      createGallery(data.hits);
+      window.scrollBy({
+        top:
+          document.querySelector('.gallery-item').getBoundingClientRect()
+            .height * 2,
+        behavior: 'smooth',
+      });
+      if (page >= Math.ceil(data.totalHits / 15)) {
+        console.log(
+          `We're sorry, but you've reached the end of search results.`
+        );
+        iziToast.show({
+          message: `We're sorry, but you've reached the end of search results.`,
+          position: 'topRight',
+        });
+      } else {
+        showLoadMoreButton();
+        refs.loadMoreButton.addEventListener('click', onLoadMoreButtonClick);
+      }
     }
   } catch (error) {
     console.log(error);
