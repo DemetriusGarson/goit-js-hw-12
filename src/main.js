@@ -24,7 +24,7 @@ let page = 1;
 
 refs.form.addEventListener('submit', onSubmitButtonClick);
 
-async function onSubmitButtonClick() {
+async function onSubmitButtonClick(event) {
   event.preventDefault();
   clearGallery();
   hideLoadMoreButton();
@@ -48,7 +48,7 @@ async function onSubmitButtonClick() {
         });
       } else {
         createGallery(data.hits);
-        if (Math.ceil(data.totalHits / 15) < page) {
+        if (page < Math.ceil(data.totalHits / 15)) {
           console.log(
             `We're sorry, but you've reached the end of search results.`
           );
@@ -86,7 +86,7 @@ async function onLoadMoreButtonClick() {
         2,
       behavior: 'smooth',
     });
-    if (Math.ceil(data.totalHits / 15) < page) {
+    if (page < Math.ceil(data.totalHits / 15)) {
       console.log(`We're sorry, but you've reached the end of search results.`);
       iziToast.show({
         message: `We're sorry, but you've reached the end of search results.`,
