@@ -73,8 +73,6 @@ async function onSubmitButtonClick(event) {
 }
 
 async function onLoadMoreButtonClick() {
-  hideLoadMoreButton();
-  refs.loadMoreButton.removeEventListener('click', onLoadMoreButtonClick);
   page += 1;
   showLoader();
   try {
@@ -85,14 +83,19 @@ async function onLoadMoreButtonClick() {
           'Sorry, there are no images matching your search query. Please try again!',
         position: 'topRight',
       });
+      hideLoadMoreButton();
+      refs.loadMoreButton.removeEventListener('click', onLoadMoreButtonClick);
     } else {
       createGallery(data.hits);
+
       window.scrollBy({
         top:
           document.querySelector('.gallery-item').getBoundingClientRect()
             .height * 2,
         behavior: 'smooth',
       });
+      hideLoadMoreButton();
+      refs.loadMoreButton.removeEventListener('click', onLoadMoreButtonClick);
       if (page >= Math.ceil(data.totalHits / 15)) {
         console.log(
           `We're sorry, but you've reached the end of search results.`
